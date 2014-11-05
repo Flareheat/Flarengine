@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 
+import org.flarengine.audio.loader.AudioLoader;
 import org.flarengine.input.Keyboard;
 import org.flarengine.input.Mouse;
 
@@ -30,6 +31,7 @@ public abstract class Game implements Runnable
 	protected final Mouse mouse;
 	protected final GraphicsDevice device;
 	protected final Toolkit toolkit;
+	protected final AudioLoader audioLoader;
 
 	public Game(String title)
 	{
@@ -41,6 +43,7 @@ public abstract class Game implements Runnable
 		this.mouse = new Mouse();
 		this.device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		this.toolkit = Toolkit.getDefaultToolkit();
+		this.audioLoader = new AudioLoader(this);
 		this.title = title;
 		this.width = this.toolkit.getScreenSize().getWidth() / 2;
 		this.height = this.toolkit.getScreenSize().getHeight() / 2;
@@ -81,8 +84,7 @@ public abstract class Game implements Runnable
 				@Override
 				public void windowClosing(WindowEvent event)
 				{
-					Game.this.hide();
-					Game.this.stop();
+					Game.this.exit(0);
 				}
 			});
 		}
@@ -156,12 +158,13 @@ public abstract class Game implements Runnable
 				}
 			}
 		}
-		this.clean();
 	}
 
-	public final void clean()
+	public final void exit(int code)
 	{
-		System.exit(0);
+		this.hide();
+		this.stop();
+		System.exit(code);
 	}
 
 	public final void show()

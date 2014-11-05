@@ -5,24 +5,32 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 
 import org.flarengine.Game;
+import org.flarengine.audio.Audio;
 import org.flarengine.input.bind.Keybind;
 
 public class Minicraft extends Game
 {
-	private Keybind escapeKey = new Keybind(KeyEvent.VK_ESCAPE);
+	private final Keybind escapeKey = new Keybind(KeyEvent.VK_ESCAPE);
+	private final Keybind spaceKey = new Keybind(KeyEvent.VK_SPACE);
+	private final Audio audioTheme;
 
 	public Minicraft()
 	{
 		super("Minicraft");
+		this.audioTheme = this.audioLoader.load("src/test/resources/theme.wav");
+		this.audioLoader.set("theme", this.audioTheme);
 	}
 
 	@Override
 	public void update()
 	{
-		if (this.keyboard.isKeyDown(escapeKey))
+		if (this.keyboard.isKeyDown(this.escapeKey))
 		{
-			this.hide();
-			this.stop();
+			this.exit(0);
+		}
+		if (this.keyboard.isKeyDown(this.spaceKey))
+		{
+			this.audioLoader.play("theme");
 		}
 	}
 
